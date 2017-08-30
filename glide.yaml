@@ -1,0 +1,4 @@
+package: port-info
+import:
+- package: github.com/Sirupsen/logrus
+  version: ^1.0.3

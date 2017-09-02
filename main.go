@@ -1,117 +1,18 @@
 package main
 
 import (
-	"net"
+	"port-info/port"
+	"fmt"
 	"time"
-	//log "github.com/Sirupsen/logrus"
-	"log"
-	"io"
-	"strconv"
-	"math/big"
 )
 
 func main() {
-	var name Port
-	name.StartPortForward("0.0.0.0:8700", "192.168.0.88:13000")
-}
+	a := port.StartPortForward("0.0.0.0:8700", "192.168.0.88:13000")
 
-type Port struct {
-	totalByte    big.Int
-	speedSumByte int64
-}
-
-// sourcePort 源地址和端口，0.0.0.0:8700
-// targetPort 数据转发给哪个端口192.168.1.100:3306
-func (p *Port) StartPortForward(sourcePort string, targetPort string) {
-	go p.begin()
-	localListener, err := net.Listen("tcp", sourcePort)
-	if err != nil {
-		log.Print("port bind")
-		return
-	}
-	for {
-		log.Print("aaaaaa")
-		sourceConn, err := localListener.Accept()
-
-		if err != nil {
-			break
-		}
-		//id := sourceConn.RemoteAddr().String()
-		//targetPort := "172.16.128.83:22"
-		targetConn, err := net.DialTimeout("tcp", targetPort, 30*time.Second)
-
-		go func() {
-			log.Print("-->")
-			_, err = p.Copy(targetConn, sourceConn)
-			if err != nil {
-				log.Println("error", err)
-			}
-		}()
-
-		go func() {
-			log.Print("<---")
-			_, err = p.Copy(sourceConn, targetConn)
-			if err != nil {
-				log.Println("error", err)
-			}
-		}()
-
-	}
-
-}
-
-func (p *Port) begin() {
+	b := port.StartPortForward("0.0.0.0:8701", "192.168.0.88:13000")
 	for true {
 		time.Sleep(time.Second)
-		log.Println(p.getSpeed(p.speedSumByte))
-		p.speedSumByte = 0
+		fmt.Println("aaa= ", a.TotalByte.String())
+		fmt.Println("bbb=", b.TotalByte.String())
 	}
-}
-func (p *Port) getSpeed(_sum int64) string {
-	if _sum > 1048576 {
-		return strconv.FormatInt(_sum/1048576, 10) + " MB/s"
-	}
-	if _sum > 1024 {
-		return strconv.FormatInt(_sum/1024, 10) + " KB/s"
-	}
-	if _sum > 0 {
-		return strconv.FormatInt(_sum, 10) + " B/s"
-	} else
-	{
-		return ""
-	}
-}
-func (p *Port) Copy(src net.Conn, dst net.Conn) (written int64, err error) {
-	defer src.Close()
-	defer dst.Close()
-	buf := make([]byte, 1048576) //1M
-	log.Println("local:" + src.LocalAddr().String() + " ==== " + "remote" + dst.RemoteAddr().String())
-	for {
-		nr, er := src.Read(buf)
-		if nr > 0 {
-			nw, ew := dst.Write(buf[0:nr])
-			p.speedSumByte += int64(nw)
-			p.totalByte.Add(big.NewInt(p.speedSumByte),&p.totalByte)
-			//log.Println(nw,ew)
-			if nw > 0 {
-				written += int64(nw)
-			} else {
-			}
-			if ew != nil {
-				err = ew
-				break
-			}
-			if nr != nw {
-				//err = ErrShortWrite
-				break
-			}
-		}
-		if er != nil {
-			if er != io.EOF {
-				err = er
-			}
-			break
-		}
-	}
-	return written, err
 }

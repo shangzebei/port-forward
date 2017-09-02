@@ -3,9 +3,12 @@ package port
 import (
 	"fmt"
 	"port-info/util"
+	"math/big"
 )
 
 type Limit struct {
+	hasByte    big.Int
+	speedBytes int
 }
 
 func (kk *Limit) StaticInfo(copyBytes int64, port *port) () {
@@ -13,8 +16,7 @@ func (kk *Limit) StaticInfo(copyBytes int64, port *port) () {
 	if port.TotalByte.Int64() > 381209328 {
 		fmt.Println("======stop====")
 
-			port.StopForward()
+		port.StopForward()
 
 	}
-	fmt.Println(port.TotalByte.Int64())
 }

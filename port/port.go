@@ -12,26 +12,26 @@ type port struct {
 	TotalByte    big.Int
 	SpeedSumByte int64
 	statics      *Statics
-	b_stop       bool
-	b_pause      bool
+	B_stop       bool
+	B_pause      bool
 }
 
 func StartPortForward(sourcePort string, targetPort string) *port {
 	p := port{}
-	go p.portForward(sourcePort, targetPort)
+	go p.processPort(sourcePort, targetPort)
 	return &p
 }
 
 func (p *port) StopForward() {
-	p.b_stop = true
+	p.B_stop = true
 }
 
 func (p *port) Pause() {
-	p.b_pause = true
+	p.B_pause = true
 }
 
 func (p *port) UnPause() {
-	p.b_pause = false
+	p.B_pause = false
 }
 
 func (p *port) SetStatics(statics *Statics) {
@@ -39,7 +39,7 @@ func (p *port) SetStatics(statics *Statics) {
 }
 
 ///////////////////////////////////////////////
-func (p *port) portForward(sourcePort string, targetPort string) {
+func (p *port) processPort(sourcePort string, targetPort string) {
 
 	go p.staticsPort()
 
@@ -49,11 +49,11 @@ func (p *port) portForward(sourcePort string, targetPort string) {
 		return
 	}
 
-	for !p.b_stop {
+	for !p.B_stop {
 
 		sourceConn, err := localListener.Accept()
 
-		if p.b_pause {
+		if p.B_pause {
 			break
 		}
 

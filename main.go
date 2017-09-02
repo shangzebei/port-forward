@@ -7,16 +7,23 @@ import (
 	"log"
 	"io"
 	"strconv"
+	"math/big"
 )
 
 func main() {
-	StartPortForward("0.0.0.0:8700", "0.0.0.0:8088")
+	var name Port
+	name.StartPortForward("0.0.0.0:8700", "192.168.0.88:13000")
+}
+
+type Port struct {
+	totalByte    big.Int
+	speedSumByte int64
 }
 
 // sourcePort 源地址和端口，0.0.0.0:8700
 // targetPort 数据转发给哪个端口192.168.1.100:3306
-func StartPortForward(sourcePort string, targetPort string) {
-	go begin()
+func (p *Port) StartPortForward(sourcePort string, targetPort string) {
+	go p.begin()
 	localListener, err := net.Listen("tcp", sourcePort)
 	if err != nil {
 		log.Print("port bind")
@@ -35,17 +42,17 @@ func StartPortForward(sourcePort string, targetPort string) {
 
 		go func() {
 			log.Print("-->")
-			_, err = Copy(targetConn, sourceConn)
+			_, err = p.Copy(targetConn, sourceConn)
 			if err != nil {
-				log.Println("error",err)
+				log.Println("error", err)
 			}
 		}()
 
 		go func() {
 			log.Print("<---")
-			_, err = Copy(sourceConn, targetConn)
+			_, err = p.Copy(sourceConn, targetConn)
 			if err != nil {
-				log.Println("error",err)
+				log.Println("error", err)
 			}
 		}()
 
@@ -53,32 +60,38 @@ func StartPortForward(sourcePort string, targetPort string) {
 
 }
 
-var sum int64
-
-func begin() {
+func (p *Port) begin() {
 	for true {
 		time.Sleep(time.Second)
-		log.Println(getSpeed(sum))
-		sum = 0
+		log.Println(p.getSpeed(p.speedSumByte))
+		p.speedSumByte = 0
 	}
 }
-func getSpeed(_sum int64) string {
+func (p *Port) getSpeed(_sum int64) string {
 	if _sum > 1048576 {
 		return strconv.FormatInt(_sum/1048576, 10) + " MB/s"
 	}
 	if _sum > 1024 {
 		return strconv.FormatInt(_sum/1024, 10) + " KB/s"
 	}
-	return strconv.FormatInt(_sum, 10) + " B/s"
+	if _sum > 0 {
+		return strconv.FormatInt(_sum, 10) + " B/s"
+	} else
+	{
+		return ""
+	}
 }
-func Copy(src net.Conn, dst net.Conn) (written int64, err error) {
-	buf := make([]byte, 32*1024)
+func (p *Port) Copy(src net.Conn, dst net.Conn) (written int64, err error) {
+	defer src.Close()
+	defer dst.Close()
+	buf := make([]byte, 1048576) //1M
 	log.Println("local:" + src.LocalAddr().String() + " ==== " + "remote" + dst.RemoteAddr().String())
 	for {
 		nr, er := src.Read(buf)
 		if nr > 0 {
 			nw, ew := dst.Write(buf[0:nr])
-			sum += int64(nw)
+			p.speedSumByte += int64(nw)
+			p.totalByte.Add(big.NewInt(p.speedSumByte),&p.totalByte)
 			//log.Println(nw,ew)
 			if nw > 0 {
 				written += int64(nw)
@@ -100,6 +113,5 @@ func Copy(src net.Conn, dst net.Conn) (written int64, err error) {
 			break
 		}
 	}
-	log.Println("end")
 	return written, err
 }

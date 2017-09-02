@@ -1,33 +1,25 @@
 package port
 
 import (
-	"fmt"
-	"port-info/util"
 	"math/big"
 )
 
 type Limit struct {
 	maxBytes   big.Int
-	hasByte    big.Int
+	useByte    big.Int
 	speedBytes int
 }
 //50M  30M
-func (kk *Limit) ResetHasByte() {
-
-
+func (kk *Limit) AddHasByte(b int64) {
+  kk.maxBytes.Add(&kk.maxBytes,big.NewInt(int64(b)))
 }
 func (kk *Limit) ReSetSpeed()  {
-
-
 
 }
 
 func (kk *Limit) StaticInfo(copyBytes int64, port *port) () {
-	fmt.Println(util.GetSpeed(copyBytes))
-	if port.TotalByte.Int64() > 381209328 {
-		fmt.Println("======stop====")
-
+	kk.useByte.Add(&kk.useByte,big.NewInt(copyBytes))
+	if kk.maxBytes.Sub(&kk.maxBytes,&kk.useByte).Int64()<= 0 {
 		port.StopForward()
-
 	}
 }

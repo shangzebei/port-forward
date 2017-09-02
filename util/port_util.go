@@ -17,15 +17,15 @@ func GetSpeed(sum int64) string {
 	}
 }
 
-func GetBytePeerSecond(sumByte int64) string {
+func GetBytePeerSecond(sumByte uint64) string {
 	if sumByte > 1048576 {
-		return strconv.FormatInt(sumByte/1048576, 10) + " MB"
+		return strconv.FormatUint(sumByte/1048576, 10) + " MB"
 	}
 	if sumByte > 1024 {
-		return strconv.FormatInt(sumByte/1024, 10) + " KB"
+		return strconv.FormatUint(sumByte/1024, 10) + " KB"
 	}
 	if sumByte > 0 {
-		return strconv.FormatInt(sumByte, 10) + " B"
+		return strconv.FormatUint(sumByte, 10) + " B"
 	} else
 	{
 		return ""

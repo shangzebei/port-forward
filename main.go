@@ -5,6 +5,7 @@ import (
 	"time"
 	"fmt"
 	"github.com/shirou/gopsutil/mem"
+	"port-info/util"
 )
 
 func main() {
@@ -13,8 +14,9 @@ func main() {
 	port.StartPortForward("0.0.0.0:8701", "192.168.0.88:13000")
 	v, _ := mem.VirtualMemory()
 
+
 	// almost every return value is a struct
-	fmt.Printf("Total: %v, Free:%v, UsedPercent:%f%%\n", v.Total, v.Free, v.UsedPercent)
+	fmt.Printf("Total: %v, Free:%v, UsedPercent:%f%%\n", util.GetBytePeerSecond(int64(v.Total)), util.GetBytePeerSecond(int64(v.Available)), v.UsedPercent)
 
 	// convert to JSON. String() is also implemented
 	fmt.Println(v)

@@ -1,8 +1,18 @@
-hash: 2eeb4f41d05321f5f81eadc6a21fe9d336a7933392dff9b1adb44213151e4459
-updated: 2017-09-02T17:46:47.4949203+08:00
+hash: 2643c395a094df734f0e2144bb6ac9fe5c0ced123fbabc97366568b6773bfa67
+updated: 2017-09-02T18:10:14.2678857+08:00
 imports:
 - name: github.com/mitchellh/go-ps
   version: 4fdf99ab29366514c69ccccddab5dc58b8d84062
+- name: github.com/shirou/gopsutil
+  version: 114c78c777eb86b58e40910cbd3fc451829c366d
+  subpackages:
+  - internal/common
+  - mem
 - name: github.com/Sirupsen/logrus
   version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
+- name: golang.org/x/sys
+  version: 7ddbeae9ae08c6a06a59597f0c9edbc5ff2444ce
+  subpackages:
+  - unix
+  - windows
 testImports: []

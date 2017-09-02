@@ -9,21 +9,29 @@ import (
 )
 
 type port struct {
-	TotalByte    big.Int
-	SpeedSumByte int64
-	statics      *Statics
-	B_stop       bool
-	B_pause      bool
+	localListener *net.Listener
+	LocalPort     string
+	TotalByte     big.Int
+	SpeedSumByte  int64
+	B_stop        bool
+	B_pause       bool
+
+	statics []Statics
 }
+
+var ForwardPoll = make(map[string]*port)
 
 func StartPortForward(sourcePort string, targetPort string) *port {
 	p := port{}
 	go p.processPort(sourcePort, targetPort)
+	p.statics = make([]Statics, 5)
 	return &p
 }
 
 func (p *port) StopForward() {
 	p.B_stop = true
+	(*p.localListener).Close()
+	delete(ForwardPoll, p.LocalPort)
 }
 
 func (p *port) Pause() {
@@ -34,28 +42,29 @@ func (p *port) UnPause() {
 	p.B_pause = false
 }
 
-func (p *port) SetStatics(statics *Statics) {
-	p.statics = statics
+func (p *port) AddStatics(statics Statics) {
+	p.statics = append(p.statics, statics)
 }
 
 ///////////////////////////////////////////////
 func (p *port) processPort(sourcePort string, targetPort string) {
 
+	p.LocalPort = sourcePort
+
 	go p.staticsPort()
 
+	ForwardPoll[p.LocalPort] = p
+
 	localListener, err := net.Listen("tcp", sourcePort)
+	p.localListener = &localListener
 	if err != nil {
 		log.Print("port bind")
 		return
 	}
 
 	for !p.B_stop {
-
+		log.Print(p.B_pause)
 		sourceConn, err := localListener.Accept()
-
-		if p.B_pause {
-			break
-		}
 
 		if err != nil {
 			break
@@ -82,13 +91,17 @@ func (p *port) processPort(sourcePort string, targetPort string) {
 
 	}
 
+	delete(ForwardPoll, sourcePort)
 }
 
 func (p *port) staticsPort() {
 	for true {
 		time.Sleep(time.Second)
-		if p.statics != nil {
-			(*p.statics).StaticInfo(p.SpeedSumByte, p)
+		//fmt.Println(key,value)
+		for _, value := range p.statics {
+			if value != nil {
+				value.StaticInfo(p.SpeedSumByte, p)
+			}
 		}
 		p.SpeedSumByte = 0
 	}
@@ -100,6 +113,9 @@ func (p *port) copy(src net.Conn, dst net.Conn) (written int64, err error) {
 	buf := make([]byte, 1048576) //1M
 	log.Println("local:" + src.LocalAddr().String() + " ==== " + "remote" + dst.RemoteAddr().String())
 	for {
+		if p.B_stop || p.B_pause {
+			break
+		}
 		nr, er := src.Read(buf)
 		if nr > 0 {
 			nw, ew := dst.Write(buf[0:nr])

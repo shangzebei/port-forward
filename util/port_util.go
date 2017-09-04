@@ -1,17 +1,20 @@
 package util
 
-import "strconv"
+import (
+	"strconv"
+	"fmt"
+)
 
-func GetBytePeerSecond(sum int64) string {
-
-	if sum > 1048576 {
-		return strconv.FormatInt(sum/1048576, 10) + " MB/s"
+func GetBytePeerSecond(sum float64) string {
+	fmt.Println(sum)
+	if sum >= 1048576 {
+		return strconv.FormatFloat(sum/1048576, 'f', 2, 64) + " MB/s"
 	}
-	if sum > 1024 {
-		return strconv.FormatInt(sum/1024, 10) + " KB/s"
+	if sum >= 1024 {
+		return strconv.FormatFloat(sum/1024, 'f', 2, 64) + " KB/s"
 	}
 	if sum > 0 {
-		return strconv.FormatInt(sum, 10) + " B/s"
+		return strconv.FormatFloat(sum, 'f', -1, 64) + " B/s"
 	} else
 	{
 		return ""
@@ -19,17 +22,17 @@ func GetBytePeerSecond(sum int64) string {
 }
 
 func GetBytes(sumByte float64) string {
-	if sumByte > 1048576*1024 {
-		return strconv.FormatFloat(sumByte/(1048576*1024), byte('f'),-1,64) + " GB"
+	if sumByte >= 1048576*1024 {
+		return strconv.FormatFloat(sumByte/(1048576*1024), 'f', 2, 64) + " GB"
 	}
-	if sumByte > 1048576 {
-		return strconv.FormatFloat(sumByte/1048576, byte('f'),2,64) + " MB"
+	if sumByte >= 1048576 {
+		return strconv.FormatFloat(sumByte/1048576, 'f', 2, 64) + " MB"
 	}
-	if sumByte > 1024 {
-		return strconv.FormatFloat(sumByte/1024, byte('f'),-1,64) + " KB"
+	if sumByte >= 1024 {
+		return strconv.FormatFloat(sumByte/1024, 'f', 2, 64) + " KB"
 	}
-	if sumByte > 0 {
-		return strconv.FormatFloat(sumByte, byte('f'),-1,64) + " B"
+	if sumByte >= 0 {
+		return strconv.FormatFloat(sumByte, 'f', -1, 64) + " B"
 	} else
 	{
 		return ""

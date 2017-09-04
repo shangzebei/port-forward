@@ -1,8 +1,10 @@
-hash: b5a95188e9ebef7d2e2ae8cf7688b160992eff2e61e21ed2551b912dfca063da
-updated: 2017-09-02T18:30:34.7855203+08:00
+hash: 399dac4d2424406c7c68d5a08b7679f54d2cc8921688718961b914fcbddb73dd
+updated: 2017-09-04T12:37:10.3916926+08:00
 imports:
 - name: github.com/gin-gonic/gin
   version: d459835d2b077e44f7c9b453505ee29881d5d12d
+- name: github.com/juju/ratelimit
+  version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/mitchellh/go-ps
   version: 4fdf99ab29366514c69ccccddab5dc58b8d84062
 - name: github.com/shirou/gopsutil

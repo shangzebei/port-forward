@@ -2,6 +2,8 @@ package port
 
 import (
 	"math/big"
+	"fmt"
+	"port-info/util"
 )
 
 type Limit struct {
@@ -18,8 +20,9 @@ func (kk *Limit) ReSetSpeed()  {
 }
 
 func (kk *Limit) StaticInfo(copyBytes int64, port *port) () {
-	kk.useByte.Add(&kk.useByte,big.NewInt(copyBytes))
-	if kk.maxBytes.Sub(&kk.maxBytes,&kk.useByte).Int64()<= 0 {
-		port.StopForward()
-	}
+	fmt.Println(util.GetBytePeerSecond(float64(copyBytes)))
+	//kk.useByte.Add(&kk.useByte,big.NewInt(copyBytes))
+	//if kk.maxBytes.Sub(&kk.maxBytes,&kk.useByte).Int64()<= 0 {
+	//	port.StopForward()
+	//}
 }

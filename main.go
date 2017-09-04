@@ -5,14 +5,15 @@ import (
 	"fmt"
 	"github.com/shirou/gopsutil/mem"
 	"port-info/util"
+	"port-info/port"
 )
 
 func main() {
-	//a := port.StartPortForward("0.0.0.0:8700", "192.168.0.88:13000")
-	//a.AddStatics(&port.Limit{})
+	a := port.StartPortForward("0.0.0.0:8711", "0.0.0.0:8088")
+	a.LimitSpeed = 100* 1024
+	a.AddStatics(&port.Limit{})
 	//port.StartPortForward("0.0.0.0:8701", "192.168.0.88:13000")
 	v, _ := mem.VirtualMemory()
-
 
 	// almost every return value is a struct
 	fmt.Printf("Total: %v, Free:%v, UsedPercent:%f%%\n", util.GetBytes(float64(v.Total)), util.GetBytes(float64(v.Available)), v.UsedPercent)

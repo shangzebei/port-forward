@@ -3,16 +3,19 @@ package port
 import (
 	"math/big"
 	"io"
-	"log"
 	"net"
 	"time"
+	"github.com/juju/ratelimit"
+	"log"
 )
 
 type port struct {
+	bucket *ratelimit.Bucket
 	localListener *net.Listener
 	LocalPort     string
 	TotalByte     big.Int
-	SpeedSumByte  int64
+	SpeedPeerByte int64
+	LimitSpeed    int64
 	B_stop        bool
 	B_pause       bool
 
@@ -23,6 +26,7 @@ var ForwardPoll = make(map[string]*port)
 
 func StartPortForward(sourcePort string, targetPort string) *port {
 	p := port{}
+
 	go p.processPort(sourcePort, targetPort)
 	p.statics = make([]Statics, 5)
 	return &p
@@ -55,6 +59,10 @@ func (p *port) processPort(sourcePort string, targetPort string) {
 
 	ForwardPoll[p.LocalPort] = p
 
+	if p.LimitSpeed != 0 {
+		p.bucket = ratelimit.NewBucketWithRate(float64(p.LimitSpeed), int64(p.LimitSpeed))
+	}
+
 	localListener, err := net.Listen("tcp", sourcePort)
 	p.localListener = &localListener
 	if err != nil {
@@ -74,7 +82,6 @@ func (p *port) processPort(sourcePort string, targetPort string) {
 		targetConn, err := net.DialTimeout("tcp", targetPort, 30*time.Second)
 
 		go func() {
-			log.Print("-->")
 			_, err = p.copy(targetConn, sourceConn)
 			if err != nil {
 				log.Println("error", err)
@@ -82,7 +89,6 @@ func (p *port) processPort(sourcePort string, targetPort string) {
 		}()
 
 		go func() {
-			log.Print("<---")
 			_, err = p.copy(sourceConn, targetConn)
 			if err != nil {
 				log.Println("error", err)
@@ -95,32 +101,38 @@ func (p *port) processPort(sourcePort string, targetPort string) {
 }
 
 func (p *port) staticsPort() {
-	for true {
-		time.Sleep(time.Second)
+	for {
+		time.Sleep(time.Second*3)
 		//fmt.Println(key,value)
 		for _, value := range p.statics {
 			if value != nil {
-				value.StaticInfo(p.SpeedSumByte, p)
+				value.StaticInfo(p.SpeedPeerByte/3, p)
 			}
 		}
-		p.SpeedSumByte = 0
+		p.SpeedPeerByte = 0
 	}
 }
 
 func (p *port) copy(src net.Conn, dst net.Conn) (written int64, err error) {
 	defer src.Close()
 	defer dst.Close()
-	buf := make([]byte, 1048576) //1M
-	log.Println("local:" + src.LocalAddr().String() + " ==== " + "remote" + dst.RemoteAddr().String())
+	buf := make([]byte, 1024*16) //1M
+
 	for {
+		var nr int
+		var er error
 		if p.B_stop || p.B_pause {
 			break
 		}
-		nr, er := src.Read(buf)
+		if p.LimitSpeed == 0 {
+			nr, er = src.Read(buf)
+		} else {
+			nr, er = ratelimit.Reader(src, p.bucket).Read(buf)
+		}
 		if nr > 0 {
 			nw, ew := dst.Write(buf[0:nr])
-			p.SpeedSumByte += int64(nw)
-			p.TotalByte.Add(big.NewInt(p.SpeedSumByte), &p.TotalByte)
+			p.SpeedPeerByte += int64(nw)
+			p.TotalByte.Add(big.NewInt(p.SpeedPeerByte), &p.TotalByte)
 			//log.Println(nw,ew)
 			if nw > 0 {
 				written += int64(nw)

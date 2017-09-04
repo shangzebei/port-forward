@@ -7,12 +7,14 @@ import (
 	"time"
 	"github.com/juju/ratelimit"
 	"log"
+	"port-info/util"
 )
 
 type port struct {
 	bucket        *ratelimit.Bucket
 	localListener *net.Listener
 	LocalPort     string
+	TargetPort    string
 	TotalByte     big.Int
 	SpeedPeerByte int64
 	LimitSpeed    int64
@@ -55,7 +57,8 @@ func (p *port) AddStatics(statics Statics) {
 ///////////////////////////////////////////////
 func (p *port) processPort(sourcePort string, targetPort string) {
 
-	p.LocalPort = sourcePort
+	p.LocalPort = util.GetPort(sourcePort)
+	p.TargetPort = util.GetPort(targetPort)
 
 	go p.staticsPort()
 
@@ -67,6 +70,7 @@ func (p *port) processPort(sourcePort string, targetPort string) {
 
 	localListener, err := net.Listen("tcp", sourcePort)
 	p.localListener = &localListener
+
 	if err != nil {
 		log.Print("port bind")
 		return
@@ -99,7 +103,7 @@ func (p *port) processPort(sourcePort string, targetPort string) {
 
 	}
 
-	delete(ForwardPoll, sourcePort)
+	delete(ForwardPoll, p.LocalPort)
 }
 
 func (p *port) staticsPort() {

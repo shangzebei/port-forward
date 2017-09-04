@@ -3,6 +3,7 @@ package util
 import (
 	"strconv"
 	"fmt"
+	"strings"
 )
 
 func GetBytePeerSecond(sum float64) string {
@@ -37,4 +38,18 @@ func GetBytes(sumByte float64) string {
 	{
 		return ""
 	}
+}
+
+func GetPort(addr string) string {
+	index := strings.Index(addr, ":")
+	return addr[index+1:]
+}
+
+func CheckParam(aa ... string) bool {
+	for _, value := range aa {
+		if len(value) == 0 {
+			return false
+		}
+	}
+	return true
 }

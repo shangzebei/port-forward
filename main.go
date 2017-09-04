@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	a := port.StartPortForward("0.0.0.0:8711", "0.0.0.0:8088")
+	a := port.StartPortForward("0.0.0.0:8711", "192.168.0.88:13000")
 	a.LimitSpeed = 100* 1024
 	a.AddStatics(&port.Limit{})
 	//port.StartPortForward("0.0.0.0:8701", "192.168.0.88:13000")

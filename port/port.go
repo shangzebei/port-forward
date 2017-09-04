@@ -10,7 +10,7 @@ import (
 )
 
 type port struct {
-	bucket *ratelimit.Bucket
+	bucket        *ratelimit.Bucket
 	localListener *net.Listener
 	LocalPort     string
 	TotalByte     big.Int
@@ -37,7 +37,9 @@ func (p *port) StopForward() {
 	(*p.localListener).Close()
 	delete(ForwardPoll, p.LocalPort)
 }
-
+func (p *port) SetSpeed(bytes int64) {
+	p.LimitSpeed = bytes
+}
 func (p *port) Pause() {
 	p.B_pause = true
 }
@@ -102,7 +104,7 @@ func (p *port) processPort(sourcePort string, targetPort string) {
 
 func (p *port) staticsPort() {
 	for {
-		time.Sleep(time.Second*3)
+		time.Sleep(time.Second * 3)
 		//fmt.Println(key,value)
 		for _, value := range p.statics {
 			if value != nil {

@@ -6,13 +6,18 @@ import (
 
 func InitConfig() *gin.Engine {
 	gin := gin.Default()
+
 	bindRest(gin)
 	return gin
 }
 func bindRest(gin *gin.Engine) {
-	gin.POST("v1/startPort", startPortForward)
-	gin.POST("v1/stopPort", stopPort)
-	gin.GET("v1/listAll", listAllPort)
-	gin.POST("v1/setSpeed", setSpeed)
-	gin.GET("v1/getSystemInfo",getSystemInfo)
+	v1 := gin.Group("/v1")
+	{
+		v1.POST("startPort", startPortForward)
+		v1.POST("stopPort", stopPort)
+		v1.GET("listAll", listAllPort)
+		v1.POST("setSpeed", setSpeed)
+		v1.GET("getSystemInfo", getSystemInfo)
+	}
+
 }

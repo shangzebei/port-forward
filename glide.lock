@@ -1,5 +1,5 @@
-hash: 709a79932be3d20951b76fc8443548a62a12f8c7acabbfd2847cff69ecb0ac26
-updated: 2017-09-06T12:01:38.0844431+08:00
+hash: ef74261840cf1cdc1fa8413c318649bd55add9a1d94aafc25d77c5fb4167e769
+updated: 2017-09-06T17:20:45.7746436+08:00
 imports:
 - name: github.com/gin-contrib/sse
   version: 22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae
@@ -23,7 +23,7 @@ imports:
 - name: github.com/mitchellh/go-ps
   version: 4fdf99ab29366514c69ccccddab5dc58b8d84062
 - name: github.com/shirou/gopsutil
-  version: 114c78c777eb86b58e40910cbd3fc451829c366d
+  version: a452de7c734a0fa0f16d2e5725b0fa5934d9fbec
   subpackages:
   - cpu
   - host
@@ -33,6 +33,8 @@ imports:
   - process
 - name: github.com/shirou/w32
   version: bb4de0191aa41b5507caa14b0650cdbddcd9280b
+- name: github.com/shurcooL/vfsgen
+  version: 385e5833a54aaba5860ca26036b8e8b72135ab96
 - name: github.com/Sirupsen/logrus
   version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
 - name: github.com/StackExchange/wmi

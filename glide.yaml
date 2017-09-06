@@ -10,3 +10,4 @@ import:
   version: ^1.2.0
 - package: github.com/juju/ratelimit
 - package: github.com/StackExchange/wmi
+- package: github.com/shurcooL/vfsgen

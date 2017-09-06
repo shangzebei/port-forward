@@ -58,7 +58,7 @@ func (p *port) AddStatics(statics Statics) {
 func (p *port) processPort(sourcePort string, targetPort string) {
 
 	p.LocalPort = util.GetPort(sourcePort)
-	p.TargetPort = util.GetPort(targetPort)
+	p.TargetPort = targetPort
 
 	go p.staticsPort()
 
@@ -138,8 +138,7 @@ func (p *port) copy(src net.Conn, dst net.Conn) (written int64, err error) {
 		if nr > 0 {
 			nw, ew := dst.Write(buf[0:nr])
 			p.SpeedPeerByte += int64(nw)
-			p.TotalByte.Add(big.NewInt(p.SpeedPeerByte), &p.TotalByte)
-			//log.Println(nw,ew)
+			p.TotalByte.Add(big.NewInt(int64(nw)), &p.TotalByte)
 			if nw > 0 {
 				written += int64(nw)
 			} else {

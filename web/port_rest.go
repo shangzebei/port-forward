@@ -31,36 +31,52 @@ func startPortForward(c *gin.Context) {
 func stopPort(c *gin.Context) {
 	src := c.PostForm("port")
 	if !util.CheckParam(src) {
-		c.JSON(http.StatusNotFound, nil)
+		c.JSON(http.StatusNotFound, gin.H{"state": "no param"})
+		return
+	}
+	find_port := port.ForwardPoll[src]
+	if find_port == nil {
+		c.JSON(http.StatusOK, gin.H{"state": "not find port"})
 		return
 	}
 	port.ForwardPoll[src].StopForward()
+	c.JSON(http.StatusOK, gin.H{"state": "ok"})
 }
 
 func listAllPort(c *gin.Context) {
-	arry := make([]interface{}, len(port.ForwardPoll))
-	for index, value := range port.ForwardPoll {
+	type Info struct {
+		Src        string
+		Dst        string
+		B_run      bool
+		UseBytes   string
+		LimitSpeed string
+	}
+	array := make([]interface{}, len(port.ForwardPoll))
+	for _, value := range port.ForwardPoll {
 		if value == nil {
 			continue
 		}
-		info := make(map[string]interface{})
-		info["src"] = index
-		info["dst"] = value.TargetPort
-		info["run"] = value.B_stop
-		arry = append(arry, info)
+		info := Info{
+			value.LocalPort,
+			value.TargetPort,
+			value.B_stop,
+			util.GetBytes(float64(value.TotalByte.Uint64())),
+			util.GetBytes(float64(value.SpeedPeerByte)) + "/s",
+		}
+		array = append(array, info)
 	}
-	c.JSON(http.StatusOK, arry)
+	c.JSON(http.StatusOK, array)
 
 }
 
-func setSpeed(c *gin.Context)  {
-	port_t:=c.PostForm("port")
-	speed:=c.PostForm("speed")
-	sp,_:=strconv.ParseInt(speed,10,64)
+func setSpeed(c *gin.Context) {
+	port_t := c.PostForm("port")
+	speed := c.PostForm("speed")
+	sp, _ := strconv.ParseInt(speed, 10, 64)
 	port.ForwardPoll[port_t].SetSpeed(sp)
 }
 
-func getSystemInfo(c* gin.Context) {
-	info:=system.GetHostInfo()
-	c.JSON(http.StatusOK,info)
+func getSystemInfo(c *gin.Context) {
+	info := system.GetHostInfo()
+	c.JSON(http.StatusOK, info)
 }

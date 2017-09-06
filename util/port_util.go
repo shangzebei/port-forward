@@ -53,3 +53,19 @@ func CheckParam(aa ... string) bool {
 	}
 	return true
 }
+
+func GetByteFromString(value string) uint64 {
+	if strings.HasSuffix(value, "GB") {
+		v, _ := strconv.ParseUint(value[:len(value)-2], 10, 64)
+		return v * 1048576 * 1024
+	}
+	if strings.HasSuffix(value, "MB") {
+		v, _ := strconv.ParseUint(value[:len(value)-2], 10, 64)
+		return v * 1048576
+	}
+	if strings.HasSuffix(value, "KB") {
+		v, _ := strconv.ParseUint(value[:len(value)-2], 10, 64)
+		return v * 1024
+	}
+	return 0
+}

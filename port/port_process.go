@@ -41,6 +41,7 @@ func (p *port) StopForward() {
 }
 func (p *port) SetSpeed(bytes int64) {
 	p.LimitSpeed = bytes
+	p.bucket = ratelimit.NewBucketWithRate(float64(p.LimitSpeed), int64(p.LimitSpeed))
 }
 func (p *port) Pause() {
 	p.B_pause = true
@@ -64,12 +65,11 @@ func (p *port) processPort(sourcePort string, targetPort string) {
 
 	ForwardPoll[p.LocalPort] = p
 
-	if p.LimitSpeed != 0 {
-		p.bucket = ratelimit.NewBucketWithRate(float64(p.LimitSpeed), int64(p.LimitSpeed))
-	}
 
 	localListener, err := net.Listen("tcp", sourcePort)
 	p.localListener = &localListener
+
+
 
 	if err != nil {
 		log.Print("port bind")

@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"port-info/port"
 	"port-info/util"
-	"strconv"
 	"port-info/system"
 )
 
@@ -61,7 +60,7 @@ func listAllPort(c *gin.Context) {
 			value.TargetPort,
 			value.B_stop,
 			util.GetBytes(float64(value.TotalByte.Uint64())),
-			util.GetBytes(float64(value.SpeedPeerByte)) + "/s",
+			util.GetBytes(float64(value.LimitSpeed)) + "/s",
 		}
 		array = append(array, info)
 	}
@@ -72,8 +71,14 @@ func listAllPort(c *gin.Context) {
 func setSpeed(c *gin.Context) {
 	port_t := c.PostForm("port")
 	speed := c.PostForm("speed")
-	sp, _ := strconv.ParseInt(speed, 10, 64)
-	port.ForwardPoll[port_t].SetSpeed(sp)
+	value := util.GetByteFromString(speed)
+	if !util.CheckParam(port_t, speed) {
+		c.JSON(http.StatusOK, gin.H{"state": "port or speed param not find"})
+		return
+	}
+	v_port:=port.ForwardPoll[port_t]
+	v_port.SetSpeed(int64(value))
+	c.JSON(http.StatusOK, gin.H{"state": "ok"})
 }
 
 func getSystemInfo(c *gin.Context) {

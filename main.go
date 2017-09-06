@@ -7,5 +7,4 @@ import (
 
 func main() {
 	web.InitConfig().Run(":5555")
-
 }

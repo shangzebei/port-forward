@@ -10,8 +10,9 @@ func InitConfig() *gin.Engine {
 	return gin
 }
 func bindRest(gin *gin.Engine) {
-	gin.POST("startPort", startPortForward)
-	gin.POST("stopPort", stopPort)
-	gin.GET("listAll", listAllPort)
-	gin.GET("setSpeed", setSpeed)
+	gin.POST("v1/startPort", startPortForward)
+	gin.POST("v1/stopPort", stopPort)
+	gin.GET("v1/listAll", listAllPort)
+	gin.POST("v1/setSpeed", setSpeed)
+	gin.GET("v1/getSystemInfo",getSystemInfo)
 }

@@ -7,6 +7,8 @@ import (
 	"port-info/port"
 	"port-info/util"
 	"strconv"
+	"port-info/system"
+	"encoding/json"
 )
 
 func startPortForward(c *gin.Context) {
@@ -57,4 +59,11 @@ func setSpeed(c *gin.Context)  {
 	speed:=c.PostForm("speed")
 	sp,_:=strconv.ParseInt(speed,10,64)
 	port.ForwardPoll[port_t].SetSpeed(sp)
+}
+
+func getSystemInfo(c* gin.Context) {
+	info:=system.GetHostInfo()
+	by,_:=json.Marshal(&info)
+	fmt.Println(string(by))
+	c.JSON(http.StatusOK,info)
 }

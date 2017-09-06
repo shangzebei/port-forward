@@ -13,4 +13,5 @@ func bindRest(gin *gin.Engine) {
 	gin.POST("startPort", startPortForward)
 	gin.POST("stopPort", stopPort)
 	gin.GET("listAll", listAllPort)
+	gin.GET("setSpeed", setSpeed)
 }

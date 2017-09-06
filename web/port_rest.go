@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"port-info/port"
 	"port-info/util"
+	"strconv"
 )
 
 func startPortForward(c *gin.Context) {
@@ -49,4 +50,11 @@ func listAllPort(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, arry)
 
+}
+
+func setSpeed(c *gin.Context)  {
+	port_t:=c.PostForm("port")
+	speed:=c.PostForm("speed")
+	sp,_:=strconv.ParseInt(speed,10,64)
+	port.ForwardPoll[port_t].SetSpeed(sp)
 }

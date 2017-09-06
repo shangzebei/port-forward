@@ -8,7 +8,6 @@ import (
 	"port-info/util"
 	"strconv"
 	"port-info/system"
-	"encoding/json"
 )
 
 func startPortForward(c *gin.Context) {
@@ -63,7 +62,5 @@ func setSpeed(c *gin.Context)  {
 
 func getSystemInfo(c* gin.Context) {
 	info:=system.GetHostInfo()
-	by,_:=json.Marshal(&info)
-	fmt.Println(string(by))
 	c.JSON(http.StatusOK,info)
 }

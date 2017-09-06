@@ -1,5 +1,5 @@
 hash: ef74261840cf1cdc1fa8413c318649bd55add9a1d94aafc25d77c5fb4167e769
-updated: 2017-09-06T17:20:45.7746436+08:00
+updated: 2017-09-06T17:51:51.54896673+08:00
 imports:
 - name: github.com/gin-contrib/sse
   version: 22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae
@@ -33,6 +33,10 @@ imports:
   - process
 - name: github.com/shirou/w32
   version: bb4de0191aa41b5507caa14b0650cdbddcd9280b
+- name: github.com/shurcooL/httpfs
+  version: bc35257962c2dea93e81c976b72c7c6eac45fd8a
+  subpackages:
+  - vfsutil
 - name: github.com/shurcooL/vfsgen
   version: 385e5833a54aaba5860ca26036b8e8b72135ab96
 - name: github.com/Sirupsen/logrus
@@ -48,6 +52,10 @@ imports:
   subpackages:
   - unix
   - windows
+- name: golang.org/x/tools
+  version: 3b1faeda9afbcba128c2d794b38ffe7982141139
+  subpackages:
+  - godoc/vfs
 - name: gopkg.in/go-playground/validator.v8
   version: 5f1438d3fca68893a817e4a66806cea46a9e4ebf
 - name: gopkg.in/yaml.v2

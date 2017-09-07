@@ -6,8 +6,7 @@ import (
 )
 func InitConfig() *gin.Engine {
 	gin := gin.Default()
-	gin.StaticFS("st",assets)
-	//gin.Static("static","./asset")
+	gin.StaticFS("static",assets)
 	bindRest(gin)
 	return gin
 }

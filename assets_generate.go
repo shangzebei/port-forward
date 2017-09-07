@@ -1,3 +1,5 @@
+// +build dev
+
 package main
 
 import (
@@ -5,8 +7,10 @@ import (
 	"github.com/shurcooL/vfsgen"
 	"log"
 )
+
+
 //go:generate go run -tags=dev assets_generate.go
-func gen() {
+func main() {
 	var fs http.FileSystem = http.Dir("./asset")
 
 	err := vfsgen.Generate(fs, vfsgen.Options{

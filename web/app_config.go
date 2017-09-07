@@ -2,11 +2,12 @@ package web
 
 import (
 	"github.com/gin-gonic/gin"
-)
 
+)
 func InitConfig() *gin.Engine {
 	gin := gin.Default()
-	gin.Static("static","./asset")
+	gin.StaticFS("st",assets)
+	//gin.Static("static","./asset")
 	bindRest(gin)
 	return gin
 }

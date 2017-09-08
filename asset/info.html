@@ -5,52 +5,62 @@
     <title>Title</title>
 </head>
 <body>
-<body>
 <div id="main" style="height:400px;"></div>
+<script src="bower_components/jquery/dist/jquery.js" type="application/javascript"></script>
 <script src="js/echarts.js"></script>
+<script src="js/chart_info.js"></script>
 <script>
     var myChart = echarts.init(document.getElementById('main'));
-    option = {
-        tooltip : {
-            trigger: 'axis'
-        },
-        legend: {
-            data:['邮件营销']
+    var cpuData = [];
+    for (var i = 100; i > 0; i -= 1) {
+        cpuData.push({
+            value: [new Date().getTime() - 1000 * i, i]
+        })
+    }
+    var option = {
+        title: {
+            text: '带宽'
         },
         toolbox: {
-            show : true,
-            feature : {
-                mark : {show: true},
-                dataView : {show: true, readOnly: false},
-                magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                restore : {show: true},
-                saveAsImage : {show: true}
+            feature: {
+                saveAsImage: {}
             }
         },
-        calculable : true,
-        xAxis : [
-            {
-                type : 'category',
-                boundaryGap : false,
-                data : ['周一','周二','周三','周四','周五','周六','周日']
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                animation: false
             }
-        ],
-        yAxis : [
-            {
-                type : 'value'
+        },
+        legend: {
+            data: ['Total']
+        },
+        xAxis: {
+            type: 'time',
+            splitLine: {
+                show: false
             }
-        ],
-        series : [
-            {
-                name:'邮件营销',
-                type:'line',
-                stack: '总量',
-                data:[120, 132, 101, 134, 90, 230, 210]
-            }
-        ]
-    };
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: function (value, index) {
+                    return formatBytes(value);
+                }
+            },
+        },
+        series: [{
+            name: 'Total',
+            type: 'line',
+            data: cpuData,
+            animation: false,
+            smooth: true,
+            areaStyle: {
+                normal: {}
+            },
+        }]
+    }
     myChart.setOption(option);
 </script>
-</body>
 </body>
 </html>

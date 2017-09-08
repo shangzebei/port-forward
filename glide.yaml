@@ -11,3 +11,5 @@ import:
 - package: github.com/juju/ratelimit
 - package: github.com/StackExchange/wmi
 - package: github.com/shurcooL/vfsgen
+- package: github.com/gorilla/websocket
+  version: ^1.2.0

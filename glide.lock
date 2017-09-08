@@ -1,5 +1,5 @@
-hash: ef74261840cf1cdc1fa8413c318649bd55add9a1d94aafc25d77c5fb4167e769
-updated: 2017-09-06T17:51:51.54896673+08:00
+hash: a6d91cc3b88fc4affddbd55fafb93c4c89a6eed56e3bab13ec9c73bbc86e6e45
+updated: 2017-09-08T14:52:00.321951509+08:00
 imports:
 - name: github.com/gin-contrib/sse
   version: 22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae
@@ -16,6 +16,8 @@ imports:
   version: 17ce1425424ab154092bbb43af630bd647f3bb0d
   subpackages:
   - proto
+- name: github.com/gorilla/websocket
+  version: ea4d1f681babbce9545c9c5f3d5194a789c89f5b
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/mattn/go-isatty
@@ -48,7 +50,7 @@ imports:
   subpackages:
   - codec
 - name: golang.org/x/sys
-  version: 9aade4d3a3b7e6d876cd3823ad20ec45fc035402
+  version: a45f55524b7ec57890cfa6c6bc06b47f877be0d1
   subpackages:
   - unix
   - windows

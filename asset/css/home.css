@@ -1,6 +1,10 @@
-.zuul-btn{
-    margin-left: 10px;
+.cs-btn{
+    margin-left: 5px;
 }
 .btn-add{
     margin-top: 20px;
+}
+.m-table{
+    width: 80%;
+    margin: auto;
 }

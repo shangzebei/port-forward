@@ -50,11 +50,8 @@ func listAllPort(c *gin.Context) {
 		UseBytes   string
 		LimitSpeed string
 	}
-	array := make([]interface{}, len(port.ForwardPoll))
+	var arrar []interface{}
 	for _, value := range port.ForwardPoll {
-		if value == nil {
-			continue
-		}
 		info := Info{
 			value.LocalPort,
 			value.TargetPort,
@@ -62,9 +59,10 @@ func listAllPort(c *gin.Context) {
 			util.GetBytes(float64(value.TotalByte.Uint64())),
 			util.GetBytes(float64(value.LimitSpeed)) + "/s",
 		}
-		array = append(array, info)
+		arrar=append(arrar, info)
 	}
-	c.JSON(http.StatusOK, array)
+	fmt.Println(arrar)
+	c.JSON(http.StatusOK, arrar)
 
 }
 
@@ -76,7 +74,7 @@ func setSpeed(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"state": "port or speed param not find"})
 		return
 	}
-	v_port:=port.ForwardPoll[port_t]
+	v_port := port.ForwardPoll[port_t]
 	v_port.SetSpeed(int64(value))
 	c.JSON(http.StatusOK, gin.H{"state": "ok"})
 }

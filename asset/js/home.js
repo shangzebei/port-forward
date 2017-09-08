@@ -2,20 +2,21 @@
  * Created by shang-mac on 2017/7/2.
  */
 $(document).ready(function () {
-    http.getAjax_clean("route/getAll", function (data) {
+    http.getAjax_clean("/v1/listAll", function (data) {
         $('#table').bootstrapTable({
             columns: [{
-                field: 'id',
-                title: 'ID'
+                field: 'Src',
+                title: '端口'
             }, {
-                field: 'title',
-                title: '标识符'
+                field: 'Dst',
+                title: '映射'
             }, {
-                field: 'path',
-                title: '匹配路由'
+                field: 'view',
+                title: 'view',
+                formatter: viewFormatter
             }, {
-                field: 'url',
-                title: '目标路由'
+                field: 'UseBytes',
+                title: '使用流量'
             }, {
                 field: 'ops',
                 title: '操作',
@@ -27,13 +28,22 @@ $(document).ready(function () {
     initWebSocket();
 })
 
+function viewFormatter(value, row, index) {
+    return [
+        '<botton type="button" class="btn btn-sm btn-default cs-btn" onclick="change(\' + index + \')"><span class="glyphicon glyphicon-stats" aria-hidden="true"/> info</botton>',
+        '<botton type="button" class="btn btn-sm btn-default cs-btn" onclick="del(\'' + row.title + '\')"><span class="glyphicon glyphicon-tint" aria-hidden="true"/> limit</botton>'
+    ].join('');
+}
 
 function operateFormatter(value, row, index) {
     return [
-        '<button type="button" class="btn btn-primary zuul-btn" onclick="change(' + index + ')">修改目标</button>',
-        '<button type="button" class="btn btn-danger zuul-btn" onclick="del(\'' + row.title + '\')">删  除</button>'
+        '<button type="button" class="btn btn-sm btn-default cs-btn" onclick="change(' + index + ')"><span class="glyphicon glyphicon-play" aria-hidden="true"/> start</button>',
+        '<button type="button" class="btn btn-sm btn-default cs-btn" onclick="del(\'' + row.title + '\')"><span class="glyphicon glyphicon-pause" aria-hidden="true"/> pause</button>',
+        '<button type="button" class="btn btn-sm btn-default cs-btn" onclick="del(\'' + row.title + '\')"><span class="glyphicon glyphicon-trash" aria-hidden="true"/> delete</button>'//
     ].join('');
 }
+
+
 function add() {
     var title = $("#title");
     var local = $("#local");
@@ -50,12 +60,13 @@ function add() {
     $(".add_dia").modal("show");
 
 }
+
 function saveAdd() {
 
     var url = $("#title").val();
     var local = $("#local").val();
     var path = $("#path").val();
-    var strp=$("#stripPrefix").is(':checked')
+    var strp = $("#stripPrefix").is(':checked')
     var from = new FormData();
     from.append("title", url);
     from.append("url", local);
@@ -68,6 +79,7 @@ function saveAdd() {
 
     })
 }
+
 function del(i) {
     BootstrapDialog.confirm('确认要删除' + i + "这条路由？", function (result) {
         if (result) {
@@ -83,15 +95,17 @@ function del(i) {
 
 
 }
+
 function change(i) {
     http.getAjax_clean("route/" + (i), function (data) {
         changDialog(data)
     })
 
 }
+
 function changSave(title) {
     var local = $("#local");
-    var stripPrefix=$("#stripPrefix").is(':checked')
+    var stripPrefix = $("#stripPrefix").is(':checked')
     var fromDate = new FormData();
     fromDate.append("title", title);
     fromDate.append("local", local.val());
@@ -103,6 +117,7 @@ function changSave(title) {
     })
 
 }
+
 function changDialog(data) {
     var title = $("#title");
     var local = $("#local");
@@ -122,6 +137,7 @@ function changDialog(data) {
 
 var websocket = null;
 var localurl = document.location.href.split("/")[2] + "/routes/speed";
+
 function initWebSocket() {
 
     if ('WebSocket' in window) {
@@ -148,7 +164,7 @@ function onClose(evt) {
 }
 
 function onMessage(evt) {
-    $(".speed").text(evt.data+" t/s");
+    $(".speed").text(evt.data + " t/s");
 }
 
 function onError(evt) {

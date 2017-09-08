@@ -24,8 +24,8 @@ func echo(w http.ResponseWriter, r *http.Request) {
 	defer c.Close()
 	mt, ms, err := c.ReadMessage()
 	for {
-		fmt.Println("hello")
-		time.Sleep(time.Second)
+		//fmt.Println("hello")
+		time.Sleep(time.Second*3)
 		err = c.WriteMessage(mt, GetInfo(string(ms)))
 		if err != nil {
 			log.Println("write:", err)

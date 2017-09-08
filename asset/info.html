@@ -14,12 +14,12 @@
     var cpuData = [];
     for (var i = 100; i > 0; i -= 1) {
         cpuData.push({
-            value: [new Date().getTime() - 1000 * i, i]
+            value: [new Date().getTime() - 1000 * i, 0]
         })
     }
     var option = {
         title: {
-            text: '带宽'
+            text: 'CPU'
         },
         toolbox: {
             feature: {
@@ -44,7 +44,7 @@
         yAxis: {
             type: 'value',
             axisLabel: {
-                formatter: function (value, index) {
+                formatter: function(value, index) {
                     return formatBytes(value);
                 }
             },
@@ -60,6 +60,7 @@
             },
         }]
     }
+
     myChart.setOption(option);
 </script>
 </body>

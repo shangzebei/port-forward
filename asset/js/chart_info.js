@@ -1,6 +1,7 @@
 var websocket = null;
 var localurl = document.location.href.split("/")[2] + "/v1/info";
 initWebSocket()
+
 function initWebSocket() {
 
     if ('WebSocket' in window) {
@@ -36,11 +37,17 @@ function onMessage(evt) {
     })
 
 }
+
 function formatBytes(value) {
     var bytes = parseFloat(value);
-    if (bytes < 0) return "-";
-    else if (bytes < 1024) return bytes + " B";
-    else if (bytes < 1048576) return (bytes / 1024).toFixed(0) + " KB";
-    else if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + " MB";
-    else return (bytes / 1073741824).toFixed(1) + " GB";
+    if (bytes > 1048576 * 1024) {
+        return (bytes / (1048576 * 1024.0)).toFixed(2) + "GB"
+    }
+    if (bytes > 1048576) {
+        return (bytes / 1048576.0).toFixed(2) + "MB"
+    }
+    if (bytes > 1024) {
+        return (bytes / 1024.0).toFixed(2) + "KB"
+    }
+    return bytes
 }

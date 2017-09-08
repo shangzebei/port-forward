@@ -24,7 +24,7 @@ func startPortForward(c *gin.Context) {
 	a := port.StartPortForward(src, dst)
 	a.LimitSpeed = 0
 	c.JSON(http.StatusOK, gin.H{"state": "ok"})
-	//a.AddStatics(&port.Limit{})
+	a.AddStatics(&port.Limit{})
 }
 
 func stopPort(c *gin.Context) {

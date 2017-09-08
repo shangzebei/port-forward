@@ -1,15 +1,18 @@
 /**
- * Created by shang-mac on 2017/7/2.
+ * Created by shang on 2017/8/2.
  */
 $(document).ready(function () {
     http.getAjax_clean("/v1/listAll", function (data) {
         $('#table').bootstrapTable({
             columns: [{
                 field: 'Src',
-                title: '端口'
+                title: '端口',
             }, {
                 field: 'Dst',
-                title: '映射'
+                title: '映射',
+                formatter: function (value, row, index) {
+                    return "<span style='color: #0005ff;background: #ffe96a'>" + row.Src + " --> " + row.Dst + "</span>"
+                }
             }, {
                 field: 'view',
                 title: 'view',
@@ -45,18 +48,7 @@ function operateFormatter(value, row, index) {
 
 
 function add() {
-    var title = $("#title");
-    var local = $("#local");
-    var path = $("#path");
-    var savebtn = $(".zuul-chang");
-    var diaTitle = $("#myModalLabel");
-    title.val("");
-    title.attr("disabled", false);
-    local.val("");
-    path.attr("disabled", false);
-    savebtn.attr("onclick", "saveAdd()");
-    path.val("");
-    diaTitle.text("添加路由");
+
     $(".add_dia").modal("show");
 
 }

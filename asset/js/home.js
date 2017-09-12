@@ -122,7 +122,7 @@ function changSave(title) {
 }
 
 function info(i) {
-    self.location = 'info.html#' + i;
+    self.location = 'static/info.html#' + i;
 }
 
 function changDialog(data) {
@@ -144,7 +144,7 @@ function changDialog(data) {
 function limitSpeed(port) {
     BootstrapDialog.show({
         title: '限制带宽',
-        message: $('<div></div>').load("speed.html"),
+        message: $('<div></div>').load("static/speed.html"),
         buttons: [{
             label: '确认',
             action: function (dialogRef) {

@@ -8,7 +8,7 @@ import (
 func InitConfig() *gin.Engine {
 	route := gin.Default()
 	route.StaticFS("static", assets)
-	route.LoadHTMLFiles("asset/index.html")
+	route.LoadHTMLFiles("asset/index.html",)
 	route.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"title": "Main website",

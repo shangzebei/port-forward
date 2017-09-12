@@ -28,7 +28,7 @@ $(document).ready(function () {
             data: data
         });
     });
-    initWebSocket();
+    // initWebSocket();
 })
 
 function viewFormatter(value, row, index) {
@@ -86,6 +86,16 @@ function del(i) {
 
 }
 function startPort() {
+    var localPort = $("#localPort").val();
+    var forward = $("#forward").val();
+    var from = new FormData();
+    from.append("src", localPort);
+    from.append("dst", forward);
+    http.postAjax_clean("/v1/startPort", from, function (data) {
+        if (data.state == 'ok') {
+            window.location.reload();
+        }
+    })
 }
 function change(i) {
     http.getAjax_clean("route/" + (i), function (data) {
@@ -126,38 +136,38 @@ function changDialog(data) {
 }
 
 
-var websocket = null;
-var localurl = document.location.href.split("/")[2] + "/routes/speed";
-
-function initWebSocket() {
-
-    if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://" + localurl);
-    }
-    else if ('MozWebSocket' in window) {
-        websocket = new MozWebSocket("ws://" + localurl);
-    }
-    else {
-        websocket = new SockJS("ws://" + localurl);
-    }
-    websocket.onopen = onOpen;
-    websocket.onmessage = onMessage;
-    websocket.onerror = onError;
-    websocket.onclose = onClose;
-}
-
-function onOpen(evt) {
-
-}
-
-function onClose(evt) {
-
-}
-
-function onMessage(evt) {
-    $(".speed").text(evt.data + " t/s");
-}
-
-function onError(evt) {
-
-}
+// var websocket = null;
+// var localurl = document.location.href.split("/")[2] + "/routes/speed";
+//
+// function initWebSocket() {
+//
+//     if ('WebSocket' in window) {
+//         websocket = new WebSocket("ws://" + localurl);
+//     }
+//     else if ('MozWebSocket' in window) {
+//         websocket = new MozWebSocket("ws://" + localurl);
+//     }
+//     else {
+//         websocket = new SockJS("ws://" + localurl);
+//     }
+//     websocket.onopen = onOpen;
+//     websocket.onmessage = onMessage;
+//     websocket.onerror = onError;
+//     websocket.onclose = onClose;
+// }
+//
+// function onOpen(evt) {
+//
+// }
+//
+// function onClose(evt) {
+//
+// }
+//
+// function onMessage(evt) {
+//     $(".speed").text(evt.data + " t/s");
+// }
+//
+// function onError(evt) {
+//
+// }

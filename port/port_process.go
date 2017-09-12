@@ -7,7 +7,7 @@ import (
 	"time"
 	"github.com/juju/ratelimit"
 	"log"
-	"port-info/util"
+	"port-forward/util"
 )
 
 type port struct {

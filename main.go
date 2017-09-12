@@ -1,8 +1,8 @@
 package main
 
 import (
-	"port-info/web"
 	"runtime"
+	"port-forward/web"
 )
 
 func main() {

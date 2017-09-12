@@ -4,8 +4,8 @@ import (
 	"runtime"
 	"os"
 	"github.com/shirou/gopsutil/mem"
-	"port-info/util"
 	"github.com/shirou/gopsutil/process"
+	"port-forward/util"
 )
 
 type InfoSystem struct {

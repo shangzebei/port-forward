@@ -34,7 +34,7 @@ $(document).ready(function () {
 function viewFormatter(value, row, index) {
     return [
         '<botton type="button" class="btn btn-sm btn-default cs-btn" onclick="info(\'' + row.Src + '\')"><span class="glyphicon glyphicon-stats" aria-hidden="true"/> info</botton>',
-        '<botton type="button" class="btn btn-sm btn-default cs-btn" onclick="del(\'' + row.title + '\')"><span class="glyphicon glyphicon-tint" aria-hidden="true"/> limit</botton>'
+        '<botton type="button" class="btn btn-sm btn-default cs-btn" onclick="limitSpeed(\'' + row.Src + '\')"><span class="glyphicon glyphicon-tint" aria-hidden="true"/> limit</botton>'
     ].join('');
 }
 
@@ -63,7 +63,7 @@ function saveAdd() {
     from.append("path", path);
     from.append("stripPrefix", strp);
     http.postAjax_clean("route/add", from, function (data) {
-        if (data.state == true) {
+        if (data.state === true) {
             window.location.reload();
         }
 
@@ -76,7 +76,7 @@ function del(i) {
             var data = new FormData();
             data.append("port", i)
             http.postAjax_clean("/v1/stopPort", data, function (resdate) {
-                if (resdate.state == "ok") {
+                if (resdate.state === "ok") {
                     window.location.reload();
                 }
             })
@@ -93,7 +93,7 @@ function startPort() {
     from.append("src", localPort);
     from.append("dst", forward);
     http.postAjax_clean("/v1/startPort", from, function (data) {
-        if (data.state == 'ok') {
+        if (data.state === 'ok') {
             window.location.reload();
         }
     })
@@ -114,7 +114,7 @@ function changSave(title) {
     fromDate.append("local", local.val());
     fromDate.append("stripPrefix", stripPrefix);
     http.postAjax_clean("route/change", fromDate, function (resdate) {
-        if (resdate.state == true) {
+        if (resdate.state === true) {
             window.location.reload();
         }
     })
@@ -141,39 +141,28 @@ function changDialog(data) {
     $(".add_dia").modal("show");
 }
 
-
-// var websocket = null;
-// var localurl = document.location.href.split("/")[2] + "/routes/speed";
-//
-// function initWebSocket() {
-//
-//     if ('WebSocket' in window) {
-//         websocket = new WebSocket("ws://" + localurl);
-//     }
-//     else if ('MozWebSocket' in window) {
-//         websocket = new MozWebSocket("ws://" + localurl);
-//     }
-//     else {
-//         websocket = new SockJS("ws://" + localurl);
-//     }
-//     websocket.onopen = onOpen;
-//     websocket.onmessage = onMessage;
-//     websocket.onerror = onError;
-//     websocket.onclose = onClose;
-// }
-//
-// function onOpen(evt) {
-//
-// }
-//
-// function onClose(evt) {
-//
-// }
-//
-// function onMessage(evt) {
-//     $(".speed").text(evt.data + " t/s");
-// }
-//
-// function onError(evt) {
-//
-// }
+function limitSpeed(port) {
+    BootstrapDialog.show({
+        title: '限制带宽',
+        message: $('<div></div>').load("speed.html"),
+        buttons: [{
+            label: '确认',
+            action: function (dialogRef) {
+                var type = $("#type").val();
+                var speed = $("#speed").val();
+                if (speed==='') {
+                    speed = 0;
+                }
+                var fromDate = new FormData();
+                fromDate.append("port", port);
+                fromDate.append("speed", speed + type);
+                http.postAjax_clean("/v1/setSpeed", fromDate, function (resdate) {
+                    if (resdate.state === "ok") {
+                        window.location.reload();
+                        dialogRef.close();
+                    }
+                })
+            }
+        }]
+    });
+}

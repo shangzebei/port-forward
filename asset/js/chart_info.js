@@ -20,7 +20,8 @@ function initWebSocket() {
 }
 
 function onOpen(evt) {
-    websocket.send("6677")
+    var port=document.location.href.split("#")
+    websocket.send(port[1])
 }
 
 function onClose(evt) {

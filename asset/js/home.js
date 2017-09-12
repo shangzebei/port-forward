@@ -33,7 +33,7 @@ $(document).ready(function () {
 
 function viewFormatter(value, row, index) {
     return [
-        '<botton type="button" class="btn btn-sm btn-default cs-btn" onclick="change(\' + index + \')"><span class="glyphicon glyphicon-stats" aria-hidden="true"/> info</botton>',
+        '<botton type="button" class="btn btn-sm btn-default cs-btn" onclick="info(\'' + row.Src + '\')"><span class="glyphicon glyphicon-stats" aria-hidden="true"/> info</botton>',
         '<botton type="button" class="btn btn-sm btn-default cs-btn" onclick="del(\'' + row.title + '\')"><span class="glyphicon glyphicon-tint" aria-hidden="true"/> limit</botton>'
     ].join('');
 }
@@ -42,7 +42,7 @@ function operateFormatter(value, row, index) {
     return [
         '<button type="button" class="btn btn-sm btn-default cs-btn" onclick="change(' + index + ')"><span class="glyphicon glyphicon-play" aria-hidden="true"/> start</button>',
         '<button type="button" class="btn btn-sm btn-default cs-btn" onclick="del(\'' + row.title + '\')"><span class="glyphicon glyphicon-pause" aria-hidden="true"/> pause</button>',
-        '<button type="button" class="btn btn-sm btn-default cs-btn" onclick="del(\'' + row.title + '\')"><span class="glyphicon glyphicon-trash" aria-hidden="true"/> delete</button>'//
+        '<button type="button" class="btn btn-sm btn-default cs-btn" onclick="del(\'' + row.Src + '\')"><span class="glyphicon glyphicon-trash" aria-hidden="true"/> delete</button>'//
     ].join('');
 }
 
@@ -71,12 +71,12 @@ function saveAdd() {
 }
 
 function del(i) {
-    BootstrapDialog.confirm('确认要删除' + i + "这条路由？", function (result) {
+    BootstrapDialog.confirm('确认要删除端口 ' + i + " 这条映射？", function (result) {
         if (result) {
             var data = new FormData();
-            data.append("title", i)
-            http.postAjax_clean("route/delete", data, function (resdate) {
-                if (resdate.state == true) {
+            data.append("port", i)
+            http.postAjax_clean("/v1/stopPort", data, function (resdate) {
+                if (resdate.state == "ok") {
                     window.location.reload();
                 }
             })
@@ -85,6 +85,7 @@ function del(i) {
 
 
 }
+
 function startPort() {
     var localPort = $("#localPort").val();
     var forward = $("#forward").val();
@@ -97,6 +98,7 @@ function startPort() {
         }
     })
 }
+
 function change(i) {
     http.getAjax_clean("route/" + (i), function (data) {
         changDialog(data)
@@ -117,6 +119,10 @@ function changSave(title) {
         }
     })
 
+}
+
+function info(i) {
+    self.location = 'info.html#' + i;
 }
 
 function changDialog(data) {

@@ -40,20 +40,20 @@
                                     <div class="form-group">
                                         <label for="local">转发地址</label>
                                         <input id="local" type="text" class="form-control" placeholder="location"/>
-                                        <p class="help-block">http://www.baidu.com</p>
+                                        <p class="help-block">192.168.1.1:8080</p>
                                     </div>
                                     <div class="form-group">
-                                        <label for="path">匹配URL</label>
+                                        <label for="path">协议</label>
                                         <input id="path" type="text" class="form-control" placeholder="可选"/>
-                                        <p class="help-block">/book/**</p>
+                                        <p class="help-block">tcp</p>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" checked ='checked' id="stripPrefix" value="true"> stripPrefix
-                                            </label>
-                                        </div>
-                                    </div>
+                                    <!--<div class="form-group">-->
+                                        <!--<div class="checkbox">-->
+                                            <!--<label>-->
+                                                <!--<input type="checkbox" checked ='checked' id="stripPrefix" value="true"> stripPrefix-->
+                                            <!--</label>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
                                 </form>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-                    <button class="btn btn-primary zuul-chang" onclick="save()">保存设置</button>
+                    <button class="btn btn-primary zuul-chang" onclick="startPort()">确认新建</button>
                 </div>
             </div>
         </div>

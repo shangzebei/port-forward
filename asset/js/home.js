@@ -48,9 +48,7 @@ function operateFormatter(value, row, index) {
 
 
 function add() {
-
     $(".add_dia").modal("show");
-
 }
 
 function saveAdd() {
@@ -87,7 +85,8 @@ function del(i) {
 
 
 }
-
+function startPort() {
+}
 function change(i) {
     http.getAjax_clean("route/" + (i), function (data) {
         changDialog(data)

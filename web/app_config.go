@@ -24,4 +24,3 @@ func bindRest(route *gin.Engine) {
 	}
 
 }
-

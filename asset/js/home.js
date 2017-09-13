@@ -19,7 +19,13 @@ $(document).ready(function () {
                 formatter: viewFormatter
             }, {
                 field: 'UseBytes',
-                title: '使用流量'
+                title: '限制速度 | 使用流量',
+                formatter: function (value, row, index) {
+                    if (row.LimitSpeed.indexOf('0') === 0) {
+                        return "-- | " + row.UseBytes
+                    }
+                    return row.LimitSpeed + " | " + row.UseBytes;
+                }
             }, {
                 field: 'ops',
                 title: '操作',
@@ -142,6 +148,7 @@ function changDialog(data) {
 }
 
 function limitSpeed(port) {
+
     BootstrapDialog.show({
         title: '限制带宽',
         message: $('<div></div>').load("static/speed.html"),
@@ -150,7 +157,7 @@ function limitSpeed(port) {
             action: function (dialogRef) {
                 var type = $("#type").val();
                 var speed = $("#speed").val();
-                if (speed==='') {
+                if (speed === '') {
                     speed = 0;
                 }
                 var fromDate = new FormData();

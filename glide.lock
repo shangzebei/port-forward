@@ -1,5 +1,5 @@
-hash: a6d91cc3b88fc4affddbd55fafb93c4c89a6eed56e3bab13ec9c73bbc86e6e45
-updated: 2017-09-08T14:52:00.321951509+08:00
+hash: d5841d0fd94aa1ec2647da6a9454f02e007020b42a287902ba57a34962170eaa
+updated: 2017-09-13T17:36:16.440073104+08:00
 imports:
 - name: github.com/gin-contrib/sse
   version: 22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae
@@ -49,8 +49,12 @@ imports:
   version: 8c0409fcbb70099c748d71f714529204975f6c3f
   subpackages:
   - codec
+- name: github.com/urfave/cli
+  version: cfb38830724cc34fedffe9a2a29fb54fa9169cd1
+- name: github.com/VividCortex/godaemon
+  version: 3d9f6e0b234fe7d17448b345b2e14ac05814a758
 - name: golang.org/x/sys
-  version: a45f55524b7ec57890cfa6c6bc06b47f877be0d1
+  version: 062cd7e4e68206d8bab9b18396626e855c992658
   subpackages:
   - unix
   - windows

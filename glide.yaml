@@ -13,3 +13,6 @@ import:
 - package: github.com/shurcooL/vfsgen
 - package: github.com/gorilla/websocket
   version: ^1.2.0
+- package: github.com/VividCortex/godaemon
+- package: github.com/urfave/cli
+  version: ^1.20.0

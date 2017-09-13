@@ -105,52 +105,16 @@ function startPort() {
     })
 }
 
-function change(i) {
-    http.getAjax_clean("route/" + (i), function (data) {
-        changDialog(data)
-    })
-
-}
-
-function changSave(title) {
-    var local = $("#local");
-    var stripPrefix = $("#stripPrefix").is(':checked')
-    var fromDate = new FormData();
-    fromDate.append("title", title);
-    fromDate.append("local", local.val());
-    fromDate.append("stripPrefix", stripPrefix);
-    http.postAjax_clean("route/change", fromDate, function (resdate) {
-        if (resdate.state === true) {
-            window.location.reload();
-        }
-    })
-
-}
 
 function info(i) {
     self.location = 'static/info.html#' + i;
 }
 
-function changDialog(data) {
-    var title = $("#title");
-    var local = $("#local");
-    var path = $("#path");
-    var savebtn = $(".zuul-chang");
-    var diaTitle = $("#myModalLabel");
-    title.val(data.id);
-    title.attr("disabled", true);
-    local.val(data.location);
-    path.attr("disabled", true);
-    savebtn.attr("onclick", "changSave('" + data.id + "')");
-    path.val(data.fullPath);
-    diaTitle.text("改变路由");
-    $(".add_dia").modal("show");
-}
 
 function limitSpeed(port) {
 
     BootstrapDialog.show({
-        title: '限制带宽',
+        title: '限制速度',
         message: $('<div></div>').load("static/speed.html"),
         buttons: [{
             label: '确认',

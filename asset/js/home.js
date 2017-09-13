@@ -46,8 +46,8 @@ function viewFormatter(value, row, index) {
 
 function operateFormatter(value, row, index) {
     return [
-        '<button type="button" class="btn btn-sm btn-default cs-btn" onclick="change(' + index + ')"><span class="glyphicon glyphicon-play" aria-hidden="true"/> start</button>',
-        '<button type="button" class="btn btn-sm btn-default cs-btn" onclick="del(\'' + row.title + '\')"><span class="glyphicon glyphicon-pause" aria-hidden="true"/> pause</button>',
+        // '<button type="button" class="btn btn-sm btn-default cs-btn" onclick="change(' + index + ')"><span class="glyphicon glyphicon-play" aria-hidden="true"/> start</button>',
+        // '<button type="button" class="btn btn-sm btn-default cs-btn" onclick="del(\'' + row.title + '\')"><span class="glyphicon glyphicon-pause" aria-hidden="true"/> pause</button>',
         '<button type="button" class="btn btn-sm btn-default cs-btn" onclick="del(\'' + row.Src + '\')"><span class="glyphicon glyphicon-trash" aria-hidden="true"/> delete</button>'//
     ].join('');
 }
@@ -55,25 +55,6 @@ function operateFormatter(value, row, index) {
 
 function add() {
     $(".add_dia").modal("show");
-}
-
-function saveAdd() {
-
-    var url = $("#title").val();
-    var local = $("#local").val();
-    var path = $("#path").val();
-    var strp = $("#stripPrefix").is(':checked')
-    var from = new FormData();
-    from.append("title", url);
-    from.append("url", local);
-    from.append("path", path);
-    from.append("stripPrefix", strp);
-    http.postAjax_clean("route/add", from, function (data) {
-        if (data.state === true) {
-            window.location.reload();
-        }
-
-    })
 }
 
 function del(i) {
@@ -109,7 +90,6 @@ function startPort() {
 function info(i) {
     self.location = 'static/info.html#' + i;
 }
-
 
 function limitSpeed(port) {
 
